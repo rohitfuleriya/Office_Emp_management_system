@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse
-from .models import Employee, Department, Role
+from .models import Employee
 from datetime import datetime
 from django.db.models import Q
 
@@ -29,11 +29,11 @@ def add_emp(request):
         last_name = request.POST['last_name']
         salary = int(request.POST['salary'])
         bonus = int(request.POST['bonus'])
-        phone = int(request.POST['phone'])
-        dept = int(request.POST['dept'])
-        role = int(request.POST['role'])
+        phone = (request.POST['phone'])
+        dept = (request.POST['dept'])
+        role = (request.POST['role'])
         new_emp = Employee(first_name=first_name, last_name=last_name, salary=salary, bonus=bonus, phone=phone,
-                           dept_id=dept, role_id=role, hire_date=datetime.now())
+                           dept=dept, role=role, hire_date=datetime.now())
         new_emp.save()
         return HttpResponse('Employee added Successfully')
     elif request.method == 'GET':
@@ -67,9 +67,9 @@ def filter_emp(request):
         if name:
             emps = emps.filter(Q(first_name__icontains=name) | Q(last_name__icontains=name))
         if dept:
-            emps = emps.filter(dept__name__icontains=dept)
+            emps = emps.filter(dept__icontains=dept)
         if role:
-            emps = emps.filter(role__name__icontains=role)
+            emps = emps.filter(role__icontains=role)
 
         context = {
             'emps': emps
